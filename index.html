@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Untuk Cintaku</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Great+Vibes&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin:0;
+      font-family:'Poppins',sans-serif;
+      text-align:center;
+      background: linear-gradient(-45deg, #ffdde1, #ee9ca7, #a1c4fd, #c2e9fb);
+      background-size: 400% 400%;
+      animation: gradientBG 12s ease infinite;
+      overflow:hidden;
+      position:relative;
+    }
+    @keyframes gradientBG {
+      0% {background-position: 0% 50%;}
+      50% {background-position: 100% 50%;}
+      100% {background-position: 0% 50%;}
+    }
+    h1{
+      font-family:'Great Vibes',cursive;
+      font-size:2.8em;
+      color:#fff;
+      text-shadow: 0 0 10px #ff4d6d, 0 0 20px #ff4d6d;
+      animation: fadeIn 2s ease-in;
+    }
+    p{font-size:1.1em; color:#fff; padding:0 20px; animation: fadeIn 3s ease-in;}
+    .photo{
+      margin:20px auto;
+      width:270px;
+      border-radius:20px;
+      overflow:hidden;
+      box-shadow:0 0 25px rgba(255,255,255,.8);
+      animation: fadeIn 4s ease-in;
+    }
+    .qr{margin:20px auto;}
+    iframe{
+      border-radius:12px;
+      margin:20px 0;
+      box-shadow:0 0 20px rgba(255,255,255,0.6);
+      animation: fadeIn 5s ease-in;
+    }
+    button{
+      padding:10px 20px;
+      border:none;
+      border-radius:30px;
+      background:linear-gradient(45deg,#ff4d6d,#ff9a9e);
+      color:#fff;
+      font-size:1em;
+      cursor:pointer;
+      box-shadow:0 0 15px rgba(255,77,109,.6);
+      transition:.3s;
+      margin:5px;
+    }
+    button:hover{
+      box-shadow:0 0 25px rgba(255,77,109,1);
+      transform:scale(1.05);
+    }
+    .heart{
+      position:absolute;
+      width:20px;
+      height:20px;
+      background:red;
+      transform:rotate(45deg);
+      animation:fall 6s linear infinite;
+    }
+    .heart::before,
+    .heart::after{
+      content:'';
+      position:absolute;
+      width:20px;
+      height:20px;
+      background:red;
+      border-radius:50%;
+    }
+    .heart::before{top:-10px; left:0;}
+    .heart::after{left:-10px; top:0;}
+    @keyframes fall{
+      0%{transform:translateY(-10%) rotate(45deg); opacity:1;}
+      100%{transform:translateY(110vh) rotate(45deg); opacity:0;}
+    }
+    @keyframes fadeIn {
+      from {opacity:0; transform:translateY(20px);}
+      to {opacity:1; transform:translateY(0);}
+    }
+    .marquee{
+      position:fixed;
+      bottom:10px;
+      width:100%;
+      white-space:nowrap;
+      overflow:hidden;
+    }
+    .marquee span{
+      display:inline-block;
+      font-size:1.5em;
+      font-weight:bold;
+      color:#fff;
+      text-shadow:0 0 10px #fff,0 0 20px #ff4d6d,0 0 30px #ff4d6d;
+      animation:marquee 15s linear infinite;
+    }
+    @keyframes marquee{
+      0%{transform:translateX(100%);} 
+      100%{transform:translateX(-100%);} 
+    }
+    /* Visualizer */
+    #visualizer{
+      width:100%;
+      height:150px;
+      display:block;
+      margin-top:20px;
+    }
+    /* Stars */
+    .star {
+      position:absolute;
+      width:2px;
+      height:2px;
+      background:white;
+      border-radius:50%;
+      opacity:0.8;
+      animation: twinkle 2s infinite;
+    }
+    @keyframes twinkle {
+      0%,100%{opacity:0.2;}
+      50%{opacity:1;}
+    }
+  </style>
+</head>
+<body>
+  <h1>Untuk Cinta Kasihku ❤️</h1>
+  <p>Terimakasih karna sudah memilihku menjadi pasanganmu. Banyaknya kekurangan dan masalah yang aku lakukan membuatmu selalu terluka dan menangis. Beribu maafku untukmu, cinta kasihku.</p>
+
+  <!-- Foto -->
+  <div class="photo">
+    <img src="4431ea47-d830-4013-8d5d-c1f628f9d6d7.jfif" alt="Foto Kita" width="100%">
+  </div>
+
+  <!-- Audio autoplay dengan kontrol -->
+  <audio id="bg-music" autoplay loop>
+    <source src="4089_mobile-rington..mp3" type="audio/mpeg">
+    Browsermu tidak mendukung audio.
+  </audio>
+  <div>
+    <button onclick="playMusic()">▶ Play</button>
+    <button onclick="pauseMusic()">⏸ Pause</button>
+  </div>
+
+  <!-- Visualizer -->
+  <canvas id="visualizer"></canvas>
+
+  <!-- QR Code -->
+  <div class="qr">
+    <canvas id="qrcode"></canvas><br>
+    <button onclick="downloadQR()">Download QR Code</button>
+    <button onclick="scanQR()">Scan QR Code</button>
+  </div>
+
+  <!-- Scanner QR -->
+  <div id="scanner" style="display:none;">
+    <video id="preview" width="250" height="200" style="border:1px solid #ccc; border-radius:15px;"></video>
+    <p id="scan-result">Hasil scan akan muncul di sini</p>
+  </div>
+
+  <!-- Running Text -->
+  <div class="marquee"><span>✨ Aku mencintaimu sebesar tata suryaku ✨</span></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+  <script src="https://unpkg.com/instascan@1.0.0/umd/instascan.min.js"></script>
+  <script>
+    function createHeart(){
+      const heart=document.createElement('div');
+      heart.className='heart';
+      heart.style.left=Math.random()*100+'vw';
+      heart.style.animationDuration=3+Math.random()*5+'s';
+      document.body.appendChild(heart);
+      setTimeout(()=>heart.remove(),8000);
+    }
+    setInterval(createHeart,500);
+
+    function createStar(){
+      const star=document.createElement('div');
+      star.className='star';
+      star.style.left=Math.random()*100+'vw';
+      star.style.top=Math.random()*100+'vh';
+      star.style.animationDuration=1+Math.random()*2+'s';
+      document.body.appendChild(star);
+      setTimeout(()=>star.remove(),4000);
+    }
+    setInterval(createStar,300);
+
+    var qr = new QRious({
+      element: document.getElementById('qrcode'),
+      value: window.location.href,
+      size: 200
+    });
+
+    function downloadQR(){
+      var canvas=document.getElementById('qrcode');
+      var link=document.createElement('a');
+      link.download='qrcode.png';
+      link.href=canvas.toDataURL();
+      link.click();
+    }
+
+    function scanQR(){
+      document.getElementById('scanner').style.display='block';
+      let scanner=new Instascan.Scanner({video:document.getElementById('preview')});
+      scanner.addListener('scan',function(content){
+        document.getElementById('scan-result').innerText='Hasil: '+content;
+      });
+      Instascan.Camera.getCameras().then(cameras=>{
+        if(cameras.length>0){scanner.start(cameras[0]);}
+      }).catch(e=>console.error(e));
+    }
+
+    function playMusic(){
+      document.getElementById('bg-music').play();
+    }
+    function pauseMusic(){
+      document.getElementById('bg-music').pause();
+    }
+
+    // Visualizer Musik
+    const audio=document.getElementById('bg-music');
+    const canvas=document.getElementById('visualizer');
+    const ctx=canvas.getContext('2d');
+    let audioCtx, analyser, source, dataArray;
+
+    function setupVisualizer(){
+      audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+      analyser=audioCtx.createAnalyser();
+      source=audioCtx.createMediaElementSource(audio);
+      source.connect(analyser);
+      analyser.connect(audioCtx.destination);
+      analyser.fftSize=256;
+      const bufferLength=analyser.frequencyBinCount;
+      dataArray=new Uint8Array(bufferLength);
+      draw();
+    }
+
+    function draw(){
+      requestAnimationFrame(draw);
+      analyser.getByteFrequencyData(dataArray);
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      let barWidth=(canvas.width/dataArray.length)*2.5;
+      let x=0;
+      for(let i=0;i<dataArray.length;i++){
+        let barHeight=dataArray[i];
+        let r=barHeight+25;
+        let g=250*(i/dataArray.length);
+        let b=200;
+        ctx.fillStyle=`rgb(${r},${g},${b})`;
+        ctx.fillRect(x,canvas.height-barHeight/2,barWidth,barHeight/2);
+        x+=barWidth+1;
+      }
+    }
+
+    audio.onplay=()=>{
+      if(!audioCtx){setupVisualizer();}
+      else{audioCtx.resume();}
+    }
+
+    window.onload=()=>{
+      canvas.width=window.innerWidth;
+      canvas.height=150;
+    }
+  </script>
+</body>
+</html>
